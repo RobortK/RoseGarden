@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+
+
+
+    <View
+            android:layout_width="80dp"
+            android:layout_height="600dp"
+            android:id="@+id/view"
+            android:background="@android:color/darker_gray"
+    /><LinearLayout
+        android:orientation="vertical"
+        android:layout_width="80dp"
+        android:layout_height="600dp"
+        android:layout_margin="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:background="@android:color/white"
+
+>
+    <TextView
+            android:text="Friday\nJun 19th"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/Date"/>
+</LinearLayout>
+</RelativeLayout>

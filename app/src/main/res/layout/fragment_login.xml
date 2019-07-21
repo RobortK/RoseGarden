@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+              tools:context=".LoginFragment">
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:background="@drawable/schedule"
+    >
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+        >
+            <ImageView
+                    android:src="@drawable/r"
+                    android:layout_width="60dp"
+                    android:layout_height="75dp"
+                    android:id="@+id/R"
+
+            />
+            <TextView
+                    android:text="ose Garden"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="60sp"
+                    android:id="@+id/textView"
+                    android:gravity="bottom"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_centerInParent="true"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:background="@color/colorTheme"
+    >
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/login_button"
+                android:layout_centerInParent="true"
+                android:background="@color/colorRed"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                android:text="@string/rose_login"/>
+    </RelativeLayout>
+</LinearLayout>

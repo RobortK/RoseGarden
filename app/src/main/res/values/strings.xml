@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Rose Garden</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rose_login">Rose-Hulman Login</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_time">Time Estimation</string>
+    <string name="dialog_title_edit">Edit Task</string>
+    <string name="dialog_title_add">Add Task</string>
+</resources>
