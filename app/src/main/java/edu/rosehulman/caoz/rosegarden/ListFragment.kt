@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_list.view.*
 
@@ -31,7 +32,7 @@ class ListFragment : Fragment() {
             adapter.showAddDialog()
         }
         listView.recycler_view.adapter = adapter
-        listView.recycler_view.layoutManager = LinearLayoutManager(context)
+        listView.recycler_view.layoutManager = LinearLayoutManager(context,OrientationHelper.HORIZONTAL,false)
         listView.recycler_view.setHasFixedSize(true)
 
         val simpleItemTouchCallback =
