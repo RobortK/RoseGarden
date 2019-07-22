@@ -3,6 +3,8 @@ package edu.rosehulman.caoz.rosegarden
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -12,9 +14,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
     LoginFragment.OnLoginButtonPressedListener
 {
 
-
-
-    private  var mGoogleSignInClient: GoogleSignInClient? =null
     private  val auth = FirebaseAuth.getInstance()
     lateinit var authStateListener: FirebaseAuth.AuthStateListener
 
@@ -24,7 +23,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //setSupportActionBar(toolbar)
 
 
 
@@ -84,43 +82,23 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
     }
 
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.menu_main, menu)
-//        return true
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when(item.itemId) {
-//            R.id.action_edit_theme ->{
-//                if(auth.currentUser!=null) {
-//                    showThemeDialog(auth.currentUser!!.uid)
-//                }
-//                true
-//            }
-//            R.id.action_logout -> {
-//
-//                auth.signOut()
-//                true
-//            }
-//            R.id.toggle_button ->{
-//                val button: MenuItem = item;
-//                val isCheck =button.isChecked
-//                if(auth.currentUser!=null) {
-//                    button.setChecked(!isCheck)
-//                    button.title =
-//                        if (isCheck) {
-//                            "SHOW ALL"
-//                        } else {
-//                            "SHOW MINE"
-//                        }
-//                    switchToPhotoFragment(auth.currentUser!!.uid, !isCheck)
-//                }
-//                true
-//            }
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+
+            R.id.action_logout -> {
+                auth.signOut()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
 
     override fun onSelected(task: edu.rosehulman.caoz.rosegarden.Task) {

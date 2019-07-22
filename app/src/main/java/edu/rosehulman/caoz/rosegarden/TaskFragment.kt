@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import kotlinx.android.synthetic.main.fragment_task.view.*
 
 
 private const val ARG_TASK = "Task"
@@ -30,8 +30,11 @@ class TaskFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task, container, false)
+        val view =inflater.inflate(R.layout.fragment_task, container, false)
+        view.task_name.text = task!!.title
+        view.time_remain.text = task!!.time
+        view.due_time.text = task!!.time
+        return view
     }
 
 

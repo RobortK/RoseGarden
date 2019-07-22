@@ -8,4 +8,8 @@
     <string name="task_time">Time Estimation</string>
     <string name="dialog_title_edit">Edit Task</string>
     <string name="dialog_title_add">Add Task</string>
+    <string name="logout">Logout</string>
+    <string name="default_month">June</string>
+    <string name="default_date">19th</string>
+    <string name="task_pos">Enter Start Time</string>
 </resources>

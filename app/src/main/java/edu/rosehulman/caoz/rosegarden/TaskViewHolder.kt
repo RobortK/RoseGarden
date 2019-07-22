@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.task_view.view.*
 
 
-class TaskViewHolder(itemView: View, adapter: ListAdapter): RecyclerView.ViewHolder(itemView)  {
+class TaskViewHolder(itemView: View, adapter: taskAdapter): RecyclerView.ViewHolder(itemView)  {
     private val taskTitleView = itemView.task_title_view as TextView
     private  val taskTimeView = itemView.task_time_view as TextView
     init {
         itemView.setOnClickListener{
-
                 adapter.selectTeamAt(adapterPosition)
 
         }
