@@ -119,14 +119,14 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
 
     fun  remove(position: Int){
-       // taskRef.document(taskList[position].id).delete()
+      //  taskRef.document(taskList[position].id).delete()
     }
 
     fun  edit(position: Int, title: String, time: String){
         taskList[position].title = title
         taskList[position].time = time
 
-        //taskRef.document(taskList[position].id).set(taskList[position])
+       // taskRef.document(taskList[position].id).set(taskList[position])
 
     }
 

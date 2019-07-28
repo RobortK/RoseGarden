@@ -36,29 +36,23 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val taskAdapter = taskAdapter(context, listener,uid!!)
-        adapterList.add(taskAdapter)
-        holder.bind(dayList[position],taskAdapter,context)
+
+        holder.bind(dayList[position],adapterList[position],context)
     }
 
     fun getTaskAdapter(date: Int): taskAdapter{
-        return adapterList[0]
+        return adapterList[28]
     }
     override fun getItemCount() = dayList.size
 
 
 
-
-
-
-
-
     fun  add(date: Date){
         dayList.add(date)
+        val taskAdapter = taskAdapter(context, listener,uid!!)
+        adapterList.add(taskAdapter)
         notifyItemInserted(0)
     }
-
-
 
 
 //    fun  edit(position: Int, title: String, time: String){
@@ -67,7 +61,6 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 //
 //
 //    }
-
 
 
     fun  selectTeamAt(adapterPosition: Int){
