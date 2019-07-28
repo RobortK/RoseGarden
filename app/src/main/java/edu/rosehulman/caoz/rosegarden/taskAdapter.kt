@@ -12,51 +12,51 @@ import kotlinx.android.synthetic.main.dialog_add.view.*
 class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String) : RecyclerView.Adapter<TaskViewHolder>() {
 
     private  val  taskList = ArrayList<Task>()
-    private val taskRef = FirebaseFirestore
-        .getInstance()
-        .collection(Constants.USERS_COLLECTION)
-        .document(uid)
-        .collection(Constants.TASKS_COLLECTION)
-
-
-
-    init {
-        taskRef
-            .orderBy(Task.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
-
-            .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
-                if(exception != null){
-                    Log.e(Constants.TAG,"Listen error ${exception}")
-                    return@addSnapshotListener
-                }
-                for (docChange in snapshot!!.documentChanges){
-                    val task = Task.fromSnapShot(docChange.document)
-
-                    when (docChange.type) {
-                        DocumentChange.Type.ADDED -> {
-                            //taskList.add(task.pos, task)
-                            taskList.add(0,task)
-
-                            notifyItemInserted(0)
-                        }
-                        DocumentChange.Type.REMOVED -> {
-                            val pos = taskList.indexOfFirst { task.id == it.id }
-                            taskList.removeAt(pos)
-                            notifyItemRemoved(pos)
-
-                        }
-                        DocumentChange.Type.MODIFIED -> {
-                            val pos = taskList.indexOfFirst { task.id == it.id }
-                            taskList[pos] = task
-                            notifyItemChanged(pos)
-                        }
-
-
-
-                    }
-                }
-            }
-    }
+//    private val taskRef = FirebaseFirestore
+//        .getInstance()
+//        .collection(Constants.USERS_COLLECTION)
+//        .document(uid)
+//        .collection(Constants.TASKS_COLLECTION)
+//
+//
+//
+//    init {
+//        taskRef
+//            .orderBy(Task.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+//
+//            .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
+//                if(exception != null){
+//                    Log.e(Constants.TAG,"Listen error ${exception}")
+//                    return@addSnapshotListener
+//                }
+//                for (docChange in snapshot!!.documentChanges){
+//                    val task = Task.fromSnapShot(docChange.document)
+//
+//                    when (docChange.type) {
+//                        DocumentChange.Type.ADDED -> {
+//                            //taskList.add(task.pos, task)
+//                            taskList.add(0,task)
+//
+//                            notifyItemInserted(0)
+//                        }
+//                        DocumentChange.Type.REMOVED -> {
+//                            val pos = taskList.indexOfFirst { task.id == it.id }
+//                            taskList.removeAt(pos)
+//                            notifyItemRemoved(pos)
+//
+//                        }
+//                        DocumentChange.Type.MODIFIED -> {
+//                            val pos = taskList.indexOfFirst { task.id == it.id }
+//                            taskList[pos] = task
+//                            notifyItemChanged(pos)
+//                        }
+//
+//
+//
+//                    }
+//                }
+//            }
+//    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -112,19 +112,21 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
 
     fun  add(task: Task){
-        taskRef.add(task)
+      //  taskRef.add(task)
+        taskList.add(0,task)
+        notifyItemInserted(0)
     }
 
 
     fun  remove(position: Int){
-        taskRef.document(taskList[position].id).delete()
+       // taskRef.document(taskList[position].id).delete()
     }
 
     fun  edit(position: Int, title: String, time: String){
         taskList[position].title = title
         taskList[position].time = time
 
-        taskRef.document(taskList[position].id).set(taskList[position])
+        //taskRef.document(taskList[position].id).set(taskList[position])
 
     }
 

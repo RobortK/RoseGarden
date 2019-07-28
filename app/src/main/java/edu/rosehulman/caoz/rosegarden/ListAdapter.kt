@@ -32,17 +32,13 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.calendar_view, parent, false)
-        val adapter = taskAdapter(context, listener,uid!!)
-        adapterList.add(adapter)
-        view.task_recycler_view.adapter = adapter
-        view.task_recycler_view.layoutManager = LinearLayoutManager(context)
-        view.task_recycler_view.setHasFixedSize(true)
-
-        return ListViewHolder(view, this)
+        return ListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.bind(dayList[position])
+        val taskAdapter = taskAdapter(context, listener,uid!!)
+        adapterList.add(taskAdapter)
+        holder.bind(dayList[position],taskAdapter,context)
     }
 
     fun getTaskAdapter(date: Int): taskAdapter{
