@@ -2,61 +2,64 @@ package edu.rosehulman.caoz.rosegarden
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.dialog_add.view.*
+import java.time.LocalDateTime
 
-class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String) : RecyclerView.Adapter<TaskViewHolder>() {
+class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String, var date:String) : RecyclerView.Adapter<TaskViewHolder>() {
 
     private  val  taskList = ArrayList<Task>()
-//    private val taskRef = FirebaseFirestore
-//        .getInstance()
-//        .collection(Constants.USERS_COLLECTION)
-//        .document(uid)
-//        .collection(Constants.TASKS_COLLECTION)
-//
-//
-//
-//    init {
-//        taskRef
-//            .orderBy(Task.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
-//
-//            .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
-//                if(exception != null){
-//                    Log.e(Constants.TAG,"Listen error ${exception}")
-//                    return@addSnapshotListener
-//                }
-//                for (docChange in snapshot!!.documentChanges){
-//                    val task = Task.fromSnapShot(docChange.document)
-//
-//                    when (docChange.type) {
-//                        DocumentChange.Type.ADDED -> {
-//                            //taskList.add(task.pos, task)
-//                            taskList.add(0,task)
-//
-//                            notifyItemInserted(0)
-//                        }
-//                        DocumentChange.Type.REMOVED -> {
-//                            val pos = taskList.indexOfFirst { task.id == it.id }
-//                            taskList.removeAt(pos)
-//                            notifyItemRemoved(pos)
-//
-//                        }
-//                        DocumentChange.Type.MODIFIED -> {
-//                            val pos = taskList.indexOfFirst { task.id == it.id }
-//                            taskList[pos] = task
-//                            notifyItemChanged(pos)
-//                        }
-//
-//
-//
-//                    }
-//                }
-//            }
-//    }
+    private val taskRef = FirebaseFirestore
+        .getInstance()
+        .collection(Constants.USERS_COLLECTION)
+        .document(uid)
+        .collection(Constants.TASKS_COLLECTION)
+
+
+
+    init {
+        taskRef
+            .orderBy(Task.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+
+            .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
+                if(exception != null){
+                    Log.e(Constants.TAG,"Listen error ${exception}")
+                    return@addSnapshotListener
+                }
+                for (docChange in snapshot!!.documentChanges) {
+                    val task = Task.fromSnapShot(docChange.document)
+                    if (task.date == date) {
+                        when (docChange.type) {
+                            DocumentChange.Type.ADDED -> {
+                                //taskList.add(task.pos, task)
+                                taskList.add(0, task)
+
+                                notifyItemInserted(0)
+                            }
+                            DocumentChange.Type.REMOVED -> {
+                                val pos = taskList.indexOfFirst { task.id == it.id }
+                                taskList.removeAt(pos)
+                                notifyItemRemoved(pos)
+
+                            }
+                            DocumentChange.Type.MODIFIED -> {
+                                val pos = taskList.indexOfFirst { task.id == it.id }
+                                taskList[pos] = task
+                                notifyItemChanged(pos)
+                            }
+
+
+                        }
+                    }
+                }
+            }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -75,6 +78,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun showAddDialog(position: Int = -1){
         val builder = AlertDialog.Builder(context)
         //Set options
@@ -95,13 +99,19 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         builder.setPositiveButton(android.R.string.ok){ _,_ ->
             val title = view.title_edit_text.text.toString()
             var time = view.time_edit_text.text.toString()
+
+            val year  = LocalDateTime.now().year
+            val month = LocalDateTime.now().month.toString()
+            val day =   LocalDateTime.now().dayOfMonth
+
+
             if(time==""){
                 time = "30 Mins"
             }
             if(position>=0){
                 edit(position, title, time)
             }else {
-                add(Task(title, time))
+                add(Task(title, time,Date(day,month,year).toString()))
                 //updateQuote(MovieQuote(quote,movie))
             }
         }
@@ -112,21 +122,19 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
 
     fun  add(task: Task){
-      //  taskRef.add(task)
-        taskList.add(0,task)
-        notifyItemInserted(0)
+        taskRef.add(task)
     }
 
 
     fun  remove(position: Int){
-      //  taskRef.document(taskList[position].id).delete()
+        taskRef.document(taskList[position].id).delete()
     }
 
     fun  edit(position: Int, title: String, time: String){
         taskList[position].title = title
         taskList[position].time = time
 
-       // taskRef.document(taskList[position].id).set(taskList[position])
+        taskRef.document(taskList[position].id).set(taskList[position])
 
     }
 

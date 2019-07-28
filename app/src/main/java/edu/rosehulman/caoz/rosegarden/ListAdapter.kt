@@ -24,7 +24,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 
         val year  = LocalDateTime.now().year
         val month = LocalDateTime.now().month.toString()
-        for(i in 1..30){
+            for(i in 1..30){
             add(Date(i,month,year))
         }
     }
@@ -41,7 +41,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
     }
 
     fun getTaskAdapter(date: Int): taskAdapter{
-        return adapterList[28]
+        return adapterList[LocalDateTime.now().dayOfMonth-1]
     }
     override fun getItemCount() = dayList.size
 
@@ -49,7 +49,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 
     fun  add(date: Date){
         dayList.add(date)
-        val taskAdapter = taskAdapter(context, listener,uid!!)
+        val taskAdapter = taskAdapter(context, listener,uid!!,date.toString())
         adapterList.add(taskAdapter)
         notifyItemInserted(0)
     }
