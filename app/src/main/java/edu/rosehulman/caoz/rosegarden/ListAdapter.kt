@@ -12,18 +12,20 @@ import kotlinx.android.synthetic.main.calendar_view.view.*
 
 
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String) : RecyclerView.Adapter<ListViewHolder>() {
 
     private  val  dayList = ArrayList<Date>()
     private  val   adapterList = ArrayList<taskAdapter>()
-
+    private var cal = Calendar.getInstance()
 
     init {
 
-        val year  = LocalDateTime.now().year
-        val month = LocalDateTime.now().month.toString()
+        val year  = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
             for(i in 1..30){
             add(Date(i,month,year))
         }
@@ -41,7 +43,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
     }
 
     fun getTaskAdapter(date: Int): taskAdapter{
-        return adapterList[LocalDateTime.now().dayOfMonth-1]
+        return adapterList[cal.get(Calendar.DAY_OF_MONTH)-1]
     }
     override fun getItemCount() = dayList.size
 

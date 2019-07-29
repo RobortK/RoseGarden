@@ -1,20 +1,29 @@
 package edu.rosehulman.caoz.rosegarden
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.dialog_add.view.*
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String, var date:String) : RecyclerView.Adapter<TaskViewHolder>() {
 
     private  val  taskList = ArrayList<Task>()
+    private var cal = Calendar.getInstance()
+    private var date_button: Button? = null
     private val taskRef = FirebaseFirestore
         .getInstance()
         .collection(Constants.USERS_COLLECTION)
@@ -92,6 +101,19 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         //Content is message, view or a list of items
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_add, null, false)
         builder.setView(view)
+        date_button = view.date_button
+        date_button!!.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View) {
+                DatePickerDialog(context!!,
+                    dateSetListener,
+                    // set DatePickerDialog to point to today's date when it loads up
+                    cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH),
+                    cal.get(Calendar.DAY_OF_MONTH)).show()
+            }
+        })
+        updateDateInView()
+
         if(position >= 0){
             view.title_edit_text.setText(taskList[position].title)
             view.time_edit_text.setText(taskList[position].time)
@@ -100,9 +122,9 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             val title = view.title_edit_text.text.toString()
             var time = view.time_edit_text.text.toString()
 
-            val year  = LocalDateTime.now().year
-            val month = LocalDateTime.now().month.toString()
-            val day =   LocalDateTime.now().dayOfMonth
+            val year  =  cal.get(Calendar.YEAR)
+            val month =cal.get(Calendar.MONTH)
+            val day =    cal.get(Calendar.DAY_OF_MONTH)
 
 
             if(time==""){
@@ -146,5 +168,21 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     }
 
 
+    // create an OnDateSetListener
+    val dateSetListener = object : DatePickerDialog.OnDateSetListener {
+        override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
+                               dayOfMonth: Int) {
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, monthOfYear)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateDateInView()
+        }
+    }
+
+    private fun updateDateInView() {
+        val myFormat = "MM/dd/yyyy" // mention the format you need
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        date_button!!.text = sdf.format(cal.getTime())
+    }
 
 }

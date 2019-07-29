@@ -17,7 +17,7 @@ class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
 
 
     fun bind(date: Date, adapter: taskAdapter,context: Context?) {
-        monthView.text = date.month
+        monthView.text = date.month.toString()
         dayView.text = date.day.toString()
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter

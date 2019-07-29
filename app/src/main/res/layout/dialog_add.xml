@@ -20,5 +20,12 @@
             android:hint="@string/task_time"
 
     />
+    <Button
+            android:text="@string/default_date_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:background="@android:color/white"
+            android:id="@+id/date_button"/>
 
 </LinearLayout>
