@@ -81,10 +81,6 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     }
     override fun getItemCount() = taskList.size
 
-//    fun getPicForOwner(uid: String){
-//        val path = FieldPath.of("ui")
-//    }
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)

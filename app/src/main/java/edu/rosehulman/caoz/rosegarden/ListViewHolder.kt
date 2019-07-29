@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.calendar_view.view.*
-
+import java.text.DateFormatSymbols
 
 
 class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
@@ -17,7 +17,7 @@ class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
 
 
     fun bind(date: Date, adapter: taskAdapter,context: Context?) {
-        monthView.text = date.month.toString()
+        monthView.text =  DateFormatSymbols().getMonths()[date.month-1];
         dayView.text = date.day.toString()
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
