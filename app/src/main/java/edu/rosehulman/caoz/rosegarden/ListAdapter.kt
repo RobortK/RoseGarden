@@ -42,7 +42,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
         holder.bind(dayList[position],adapterList[position],context)
     }
 
-    fun getTaskAdapter(date: Int): taskAdapter{
+    fun getTaskAdapter(): taskAdapter{
         return adapterList[cal.get(Calendar.DAY_OF_MONTH)-1]
     }
     override fun getItemCount() = dayList.size
@@ -51,7 +51,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 
     fun  add(date: Date){
         dayList.add(date)
-        val taskAdapter = taskAdapter(context, listener,uid!!,date.toString())
+        val taskAdapter = taskAdapter(context, listener,uid,date.toString())
         adapterList.add(taskAdapter)
         notifyItemInserted(0)
     }
@@ -65,10 +65,10 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 //    }
 
 
-    fun  selectTeamAt(adapterPosition: Int){
-        val day = dayList[adapterPosition]
-       // listener?.onSelected(task)
-    }
+//    fun  selectTeamAt(adapterPosition: Int){
+//        val day = dayList[adapterPosition]
+//       // listener?.onSelected(task)
+//    }
 
 
 

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_list.view.*
 import java.time.LocalDateTime
+import java.util.*
 
 
 private const val ARG_UID = "UID"
@@ -23,16 +24,15 @@ class ListFragment : Fragment() {
     private var listener: OnSelectedListener? = null
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val date =LocalDateTime.now().dayOfMonth
+        val date = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         val listView = inflater.inflate(R.layout.fragment_list, container, false)
         val adapter = ListAdapter(context, listener,uid!!)
         listView.fab.setOnClickListener {
-            adapter.getTaskAdapter(date).showAddDialog()
+            adapter.getTaskAdapter().showAddDialog()
         }
         listView.recycler_view.adapter = adapter
         listView.recycler_view.layoutManager = LinearLayoutManager(context,OrientationHelper.HORIZONTAL,false)

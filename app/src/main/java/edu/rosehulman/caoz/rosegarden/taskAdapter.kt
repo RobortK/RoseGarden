@@ -83,7 +83,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun showAddDialog(position: Int = -1){
         val builder = AlertDialog.Builder(context)
         //Set options
