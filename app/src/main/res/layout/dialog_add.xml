@@ -21,6 +21,14 @@
 
     />
     <Button
+            android:text="@string/default_time_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:background="@android:color/white"
+            android:id="@+id/startTime_button"/>
+
+    <Button
             android:text="@string/default_date_format"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

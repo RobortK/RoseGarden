@@ -26,7 +26,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 
         val year  = cal.get(Calendar.YEAR)
         val month = cal.get(Calendar.MONTH)
-            for(i in 1..30){
+            for(i in 1..31){
             add(Date(i,month,year))
         }
     }

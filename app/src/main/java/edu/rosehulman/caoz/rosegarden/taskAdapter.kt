@@ -2,6 +2,7 @@ package edu.rosehulman.caoz.rosegarden
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -10,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.DatePicker
+import android.widget.TimePicker
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.*
@@ -24,6 +27,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     private  val  taskList = ArrayList<Task>()
     private var cal = Calendar.getInstance()
     private var date_button: Button? = null
+    private var startTime_button : Button? = null
     private val taskRef = FirebaseFirestore
         .getInstance()
         .collection(Constants.USERS_COLLECTION)
@@ -98,6 +102,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_add, null, false)
         builder.setView(view)
         date_button = view.date_button
+        startTime_button = view.startTime_button
         date_button!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 DatePickerDialog(context!!,
@@ -110,6 +115,21 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         })
         updateDateInView()
 
+        startTime_button!!.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View) {
+
+                 TimePickerDialog(context!!,
+                     timeSetListener,
+                     cal.get(Calendar.HOUR),
+                     cal.get(Calendar.MINUTE),
+                     false)
+                .show()
+            }
+        })
+
+
+
+
         if(position >= 0){
             view.title_edit_text.setText(taskList[position].title)
             view.time_edit_text.setText(taskList[position].time)
@@ -121,7 +141,8 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             val year  =  cal.get(Calendar.YEAR)
             val month =cal.get(Calendar.MONTH)
             val day =    cal.get(Calendar.DAY_OF_MONTH)
-
+            val hour = cal.get(Calendar.HOUR)
+            val min = cal.get(Calendar.MINUTE)
 
             if(time==""){
                 time = "30 Mins"
@@ -129,7 +150,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             if(position>=0){
                 edit(position, title, time)
             }else {
-                add(Task(title, time,Date(day,month,year).toString()))
+                add(Task(title, time,Date(day,month,year).toString(),"$hour : $min"))
                 //updateQuote(MovieQuote(quote,movie))
             }
         }
@@ -175,10 +196,26 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         }
     }
 
+    val timeSetListener = object : TimePickerDialog.OnTimeSetListener {
+        override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
+            cal.set(Calendar.HOUR, p1)
+            cal.set(Calendar.MINUTE, p2)
+
+            updateTimeInView()
+        }
+    }
+
+
     private fun updateDateInView() {
         val myFormat = "MM/dd/yyyy" // mention the format you need
         val sdf = SimpleDateFormat(myFormat, Locale.US)
         date_button!!.text = sdf.format(cal.getTime())
+    }
+
+    private fun updateTimeInView() {
+        val myFormat = "HH:mm" // mention the format you need
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        startTime_button!!.text = sdf.format(cal.getTime())
     }
 
 }
