@@ -13,4 +13,5 @@
     <string name="task_pos">Enter Start Time</string>
     <string name="default_date_format">Date: __/__/__</string>
     <string name="default_time_format">00:00</string>
+    <string name="default_timeremain">00:00</string>
 </resources>

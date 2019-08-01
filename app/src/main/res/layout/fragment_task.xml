@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:gravity="center_horizontal"
-             tools:context=".TaskFragment"
-                android:background="@color/colorTheme"
+              tools:context=".TaskFragment"
+              android:background="@color/colorTheme"
 >
 
 
@@ -46,39 +46,39 @@
 
     </RelativeLayout>
     <TextView
-            android:text="00:31:02"
+            android:text="@string/default_timeremain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:id="@+id/time_remain"/>
-    <Button
-            android:text="Pause"
-            android:textSize="30sp"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@android:color/white"
-            android:id="@+id/button"
 
-    />
-    <Button
-            android:text="Done"
-            android:textSize="30sp"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@android:color/white"
-            android:id="@+id/button2"
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                app:srcCompat="@drawable/play" tools:ignore="VectorDrawableCompat"/>
 
-    />
-    <Button
-            android:text="Next"
-            android:textSize="30sp"
-            android:layout_width="200dp"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                app:srcCompat="@drawable/pause" tools:ignore="VectorDrawableCompat"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_stop"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@android:color/white"
-            android:id="@+id/button3"/>
+            android:layout_marginHorizontal="40dp"
+            app:srcCompat="@drawable/stop" tools:ignore="VectorDrawableCompat"/>
+
+
+
+
+    </LinearLayout>
+
     <TextView
             android:text="Due in 0D 42 Mins"
             android:textStyle="bold"

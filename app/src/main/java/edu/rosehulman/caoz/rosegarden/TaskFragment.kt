@@ -2,12 +2,17 @@ package edu.rosehulman.caoz.rosegarden
 
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.android.synthetic.main.fragment_task.view.*
+import kotlinx.android.synthetic.main.fragment_task.view.fab_pause
+import kotlinx.android.synthetic.main.fragment_task.view.fab_start
+import kotlinx.android.synthetic.main.fragment_task.view.fab_stop
 
 
 private const val ARG_TASK = "Task"
@@ -15,10 +20,19 @@ private const val ARG_TASK = "Task"
 
 
 class TaskFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var task: Task? = null
 
+    private var task: Task? = null
+    private lateinit var timer: CountDownTimer
+    private var timerLengthSeconds: Long = 0
+    private var timerState = TimerState.Stopped
+    private var secondsRemaining: Long = 0
     private val handler = Handler()
+    enum class TimerState{
+        Stopped, Paused, Running
+    }
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,30 +54,160 @@ class TaskFragment : Fragment() {
         view.time_remain.text = task!!.time
         view.due_time.text = task!!.time
 
-        Thread(Runnable {
-            var pStatus = 0
-            while (pStatus < 100) {
-                pStatus += 1
-                handler.post {
-                    // TODO Auto-generated method stub
-                   view.progressBar.progress = pStatus
-                    view.percentage.text = pStatus.toString() + "%"
-                }
-                try {
-                    // Sleep for 200 milliseconds.
-                    // Just to display the progress slowly
-                    Thread.sleep(16) //thread will take approx 3 seconds to finish
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-            }
-        }).start()
+//        Thread(Runnable {
+//            var pStatus = 0
+//            while (pStatus < 100) {
+//                pStatus += 1
+//                handler.post {
+//
+//                   view.progressBar.progress = pStatus
+//                    view.percentage.text = pStatus.toString() + "%"
+//                }
+//                try {
+//                    // Sleep for 200 milliseconds.
+//                    // Just to display the progress slowly
+//                    Thread.sleep(16) //thread will take approx 3 seconds to finish
+//                } catch (e: InterruptedException) {
+//                    e.printStackTrace()
+//                }
+//            }
+//        }).start()
+        view.fab_start.setOnClickListener{v ->
+            startTimer()
+            timerState =  TimerState.Running
+            updateButtons()
+        }
 
+        view.fab_pause.setOnClickListener { v ->
+            timer.cancel()
+            timerState = TimerState.Paused
+            updateButtons()
+        }
+
+        view.fab_stop.setOnClickListener { v ->
+            timer.cancel()
+            onTimerFinished()
+        }
 
 
 
         return view
     }
+
+    override fun onResume() {
+        super.onResume()
+        initTimer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (timerState == TimerState.Running){
+            timer.cancel()
+            //TODO: start background timer and show notification
+        }
+        else if (timerState == TimerState.Paused){
+            //TODO: show notification
+        }
+
+        PrefUtil.setPreviousTimerLengthSeconds(timerLengthSeconds, context!!)
+        PrefUtil.setSecondsRemaining(secondsRemaining, context!!)
+        PrefUtil.setTimerState(timerState, context!!)
+    }
+
+    private fun initTimer(){
+        timerState = PrefUtil.getTimerState(context!!)
+
+        //we don't want to change the length of the timer which is already running
+        //if the length was changed in settings while it was backgrounded
+        if (timerState == TimerState.Stopped)
+            setNewTimerLength()
+        else
+            setPreviousTimerLength()
+
+        secondsRemaining = if (timerState == TimerState.Running || timerState == TimerState.Paused)
+            PrefUtil.getSecondsRemaining(context!!)
+        else
+            timerLengthSeconds
+
+        //TODO: change secondsRemaining according to where the background timer stopped
+
+        //resume where we left off
+        if (timerState == TimerState.Running)
+            startTimer()
+
+        updateButtons()
+        updateCountdownUI()
+    }
+
+    private fun onTimerFinished(){
+        timerState = TimerState.Stopped
+
+        //set the length of the timer to be the one set in SettingsActivity
+        //if the length was changed when the timer was running
+        setNewTimerLength()
+
+        progressBar.progress = 0
+
+        PrefUtil.setSecondsRemaining(timerLengthSeconds, context!!)
+        secondsRemaining = timerLengthSeconds
+
+        updateButtons()
+        updateCountdownUI()
+    }
+
+    private fun startTimer(){
+        timerState = TimerState.Running
+
+        timer = object : CountDownTimer(secondsRemaining * 1000, 1000) {
+            override fun onFinish() = onTimerFinished()
+
+            override fun onTick(millisUntilFinished: Long) {
+                secondsRemaining = millisUntilFinished / 1000
+                updateCountdownUI()
+            }
+        }.start()
+    }
+
+    private fun setNewTimerLength(){
+        val lengthInMinutes = PrefUtil.getTimerLength(context!!)
+        timerLengthSeconds = (lengthInMinutes * 60L)
+        progressBar.max = timerLengthSeconds.toInt()
+    }
+
+    private fun setPreviousTimerLength(){
+        timerLengthSeconds = PrefUtil.getPreviousTimerLengthSeconds(context!!)
+        progressBar.max = timerLengthSeconds.toInt()
+    }
+
+    private fun updateCountdownUI(){
+        val minutesUntilFinished = secondsRemaining / 60
+        val secondsInMinuteUntilFinished = secondsRemaining - minutesUntilFinished * 60
+        val secondsStr = secondsInMinuteUntilFinished.toString()
+        time_remain.text = "$minutesUntilFinished:${if (secondsStr.length == 2) secondsStr else "0" + secondsStr}"
+        progressBar.progress = (timerLengthSeconds - secondsRemaining).toInt()
+    }
+
+    private fun updateButtons(){
+        when (timerState) {
+            TimerState.Running ->{
+                fab_start.isEnabled = false
+                fab_pause.isEnabled = true
+                fab_stop.isEnabled = true
+            }
+            TimerState.Stopped -> {
+                fab_start.isEnabled = true
+                fab_pause.isEnabled = false
+                fab_stop.isEnabled = false
+            }
+            TimerState.Paused -> {
+                fab_start.isEnabled = true
+                fab_pause.isEnabled = false
+                fab_stop.isEnabled = true
+            }
+        }
+    }
+
 
 
     companion object {
