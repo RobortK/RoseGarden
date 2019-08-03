@@ -1,6 +1,11 @@
 package edu.rosehulman.caoz.rosegarden
 
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -8,11 +13,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.android.synthetic.main.fragment_task.view.*
 import kotlinx.android.synthetic.main.fragment_task.view.fab_pause
 import kotlinx.android.synthetic.main.fragment_task.view.fab_start
 import kotlinx.android.synthetic.main.fragment_task.view.fab_stop
+import java.util.*
 
 
 private const val ARG_TASK = "Task"
@@ -27,6 +34,39 @@ class TaskFragment : Fragment() {
     private var timerState = TimerState.Stopped
     private var secondsRemaining: Long = 0
     private val handler = Handler()
+
+    companion object {
+        @RequiresApi(Build.VERSION_CODES.KITKAT)
+        fun setAlarm(context: Context, nowSeconds: Long, secondsRemaining: Long): Long {
+            val wakeUpTime = (nowSeconds + secondsRemaining) * 1000
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, TimerExpiredReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
+            PrefUtil.setAlarmSetTime(nowSeconds, context)
+            return wakeUpTime
+        }
+
+        fun removeAlarm(context: Context){
+            val intent = Intent(context, TimerExpiredReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(pendingIntent)
+            PrefUtil.setAlarmSetTime(0, context)
+        }
+
+        val nowSeconds: Long
+            get() = Calendar.getInstance().timeInMillis / 1000
+
+        @JvmStatic
+        fun newInstance(task: Task) =
+            TaskFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_TASK,task)
+                }
+            }
+    }
+
     enum class TimerState{
         Stopped, Paused, Running
     }
@@ -97,13 +137,16 @@ class TaskFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         initTimer()
+        removeAlarm(context!!)
     }
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onPause() {
         super.onPause()
 
         if (timerState == TimerState.Running){
             timer.cancel()
+            val wakeUpTime = setAlarm(context!!, nowSeconds, secondsRemaining)
             //TODO: start background timer and show notification
         }
         else if (timerState == TimerState.Paused){
@@ -130,10 +173,14 @@ class TaskFragment : Fragment() {
         else
             timerLengthSeconds
 
-        //TODO: change secondsRemaining according to where the background timer stopped
+        val alarmSetTime = PrefUtil.getAlarmSetTime(context!!)
 
-        //resume where we left off
-        if (timerState == TimerState.Running)
+        if (alarmSetTime > 0)
+            secondsRemaining -= nowSeconds - alarmSetTime
+
+        if (secondsRemaining <= 0)
+            onTimerFinished()
+        else if (timerState == TimerState.Running)
             startTimer()
 
         updateButtons()
@@ -210,14 +257,5 @@ class TaskFragment : Fragment() {
 
 
 
-    companion object {
 
-        @JvmStatic
-        fun newInstance(task: Task) =
-            TaskFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_TASK,task)
-                }
-            }
-    }
 }
