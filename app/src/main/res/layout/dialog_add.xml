@@ -22,19 +22,62 @@
     />
 
     <Button
-            android:text="@string/default_time_format"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:background="@android:color/white"
-            android:id="@+id/startTime_button"/>
-
-    <Button
             android:text="@string/default_date_format"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24sp"
+            android:gravity="left"
             android:background="@android:color/white"
             android:id="@+id/date_button"/>
+
+    <Button
+            android:text="@string/default_time_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="24sp"
+            android:background="@android:color/white"
+            android:id="@+id/startTime_button"/>
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+    >
+
+        <TextView
+                android:text="@string/time_duration"
+                android:textSize="24sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/time_duration"
+        />
+        <EditText
+                android:id="@+id/hour_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:hint="@string/zero"
+                android:inputType="number"
+
+        />
+        <TextView
+            android:text="@string/semicolon"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/semicolon"
+        />
+        <EditText
+                android:id="@+id/minute_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:hint="@string/zero"
+                android:inputType="number"
+        />
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -1,6 +1,5 @@
 package edu.rosehulman.caoz.rosegarden
 
-import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +22,13 @@ class TaskViewHolder(itemView: View, adapter: taskAdapter): RecyclerView.ViewHol
 
     fun bind(task: Task) {
         taskTitleView.text = task.title
-        taskTimeView.text = task.time
+        var minuteStr =
+            if(task!!.minute>=10){
+                task!!.minute.toString()
+            }
+            else{
+                "0"+  task!!.minute.toString()
+            }
+        taskTimeView.text =   "${if (task!!.hour == 0)minuteStr+" Mins"  else task!!.hour.toString()+"Hours "+minuteStr+"Mins"}"
     }
 }

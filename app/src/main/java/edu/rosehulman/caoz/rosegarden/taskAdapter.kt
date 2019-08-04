@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +11,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.TimePicker
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.dialog_add.view.*
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -132,7 +128,11 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
         if(position >= 0){
             view.title_edit_text.setText(taskList[position].title)
-            view.time_edit_text.setText(taskList[position].time)
+            //view.time_edit_text.setText(taskList[position].duration)
+            view.hour_input.setText(taskList[position].hour.toString())
+            view.minute_input.setText(taskList[position].minute.toString())
+//            view.hour_input.setText("0")
+//            view.minute_input.setText("30")
         }
         builder.setPositiveButton(android.R.string.ok){ _,_ ->
             val title = view.title_edit_text.text.toString()
@@ -144,13 +144,13 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             val hour = cal.get(Calendar.HOUR)
             val min = cal.get(Calendar.MINUTE)
 
-            if(time==""){
-                time = "30 Mins"
-            }
+            val duration_hour =view.hour_input.text.toString().toInt()
+            val duration_min =view.minute_input.text.toString().toInt()
+
             if(position>=0){
-                edit(position, title, time)
+                edit(position, title, duration_hour,duration_min)
             }else {
-                add(Task(title, time,Date(day,month,year).toString(),"$hour : $min"))
+                add(Task(title, Date(day,month,year).toString(),"$hour : $min",duration_hour,duration_min))
                 //updateQuote(MovieQuote(quote,movie))
             }
         }
@@ -169,10 +169,10 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         taskRef.document(taskList[position].id).delete()
     }
 
-    fun  edit(position: Int, title: String, time: String){
+    fun  edit(position: Int, title: String, hour: Int, min:Int){
         taskList[position].title = title
-        taskList[position].time = time
-
+        taskList[position].hour = hour
+        taskList[position].minute = min
         taskRef.document(taskList[position].id).set(taskList[position])
 
     }

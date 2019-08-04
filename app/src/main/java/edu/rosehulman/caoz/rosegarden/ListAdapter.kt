@@ -57,9 +57,9 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
     }
 
 
-//    fun  edit(position: Int, title: String, time: String){
+//    fun  edit(position: Int, title: String, duration: String){
 //                taskList[position].title = title
-//                taskList[position].time = time
+//                taskList[position].duration = duration
 //
 //
 //    }

@@ -6,15 +6,14 @@ import android.preference.PreferenceManager
 import edu.rosehulman.caoz.rosegarden.TaskFragment
 
 
-class PrefUtil {
-    companion object {
+class PrefUtil(id: String) {
+    //companion object {
+    private val ALARM_SET_TIME_ID = "id"+"_backgrounded_time"
+    private val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "id"+"_previous_timer_length_seconds"
+    private val TIMER_STATE_ID = "id"+"_timer.timer_state"
+    private val SECONDS_REMAINING_ID = "id"+"_seconds_remaining"
 
-        fun getTimerLength(context: Context): Int {
-            //placeholder
-            return 1
-        }
 
-        private const val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "edu.rosehulman.caoz.rosegarden.previous_timer_length_seconds"
 
         fun getPreviousTimerLengthSeconds(context: Context): Long {
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -28,7 +27,7 @@ class PrefUtil {
         }
 
 
-        private const val TIMER_STATE_ID = "edu.rosehulman.caoz.rosegarden.timer.timer_state"
+
 
         fun getTimerState(context: Context): TaskFragment.TimerState {
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -44,7 +43,7 @@ class PrefUtil {
         }
 
 
-        private const val SECONDS_REMAINING_ID = "edu.rosehulman.caoz.rosegarden.seconds_remaining"
+
 
         fun getSecondsRemaining(context: Context): Long {
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -57,7 +56,7 @@ class PrefUtil {
             editor.apply()
         }
 
-        private const val ALARM_SET_TIME_ID = "edu.rosehulman.caoz.rosegarden.backgrounded_time"
+
 
         fun getAlarmSetTime(context: Context): Long{
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -69,5 +68,5 @@ class PrefUtil {
             editor.putLong(ALARM_SET_TIME_ID, time)
             editor.apply()
         }
-    }
+  //  }
 }
