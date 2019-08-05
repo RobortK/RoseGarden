@@ -18,4 +18,5 @@
     <string name="semicolon">:</string>
     <string name="time_duration">Time Duration:</string>
     <string name="default_mouth_year">June 2019</string>
+    <string name="delete">Delete</string>
 </resources>

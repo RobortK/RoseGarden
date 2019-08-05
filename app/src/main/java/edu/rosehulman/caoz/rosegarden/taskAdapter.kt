@@ -172,6 +172,11 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             }
         }
         builder.setNegativeButton(android.R.string.cancel,null)
+        if(position>=0) {
+            builder.setNeutralButton(R.string.delete) { _, _ ->
+                remove(position)
+            }
+        }
         builder.create().show()
     }
 
