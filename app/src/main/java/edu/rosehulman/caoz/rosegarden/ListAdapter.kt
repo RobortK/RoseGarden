@@ -1,17 +1,11 @@
 package edu.rosehulman.caoz.rosegarden
 
 import android.content.Context
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.calendar_view.view.*
 
 
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,7 +20,8 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 
         val year  = cal.get(Calendar.YEAR)
         val month = cal.get(Calendar.MONTH)
-            for(i in 1..31){
+        val totalDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+            for(i in 1..totalDay){
             add(Date(i,month,year))
         }
     }
@@ -43,6 +38,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
     }
 
     fun getTaskAdapter(): taskAdapter{
+        //????
         return adapterList[cal.get(Calendar.DAY_OF_MONTH)-1]
     }
     override fun getItemCount() = dayList.size

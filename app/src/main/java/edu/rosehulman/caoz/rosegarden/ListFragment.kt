@@ -34,6 +34,12 @@ class ListFragment : Fragment() {
         listView.fab.setOnClickListener {
             adapter.getTaskAdapter().showAddDialog()
         }
+        listView.prev_button.setOnClickListener {
+
+        }
+        listView.next_button.setOnClickListener {
+
+        }
         listView.recycler_view.adapter = adapter
         listView.recycler_view.layoutManager = LinearLayoutManager(context,OrientationHelper.HORIZONTAL,false)
         listView.recycler_view.setHasFixedSize(true)

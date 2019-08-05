@@ -122,6 +122,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
                 .show()
             }
         })
+        updateTimeInView()
 
 
 
@@ -131,8 +132,11 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             //view.time_edit_text.setText(taskList[position].duration)
             view.hour_input.setText(taskList[position].hour.toString())
             view.minute_input.setText(taskList[position].minute.toString())
-//            view.hour_input.setText("0")
-//            view.minute_input.setText("30")
+
+        }
+        else{
+            view.hour_input.setText("0")
+            view.minute_input.setText("30")
         }
         builder.setPositiveButton(android.R.string.ok){ _,_ ->
             val title = view.title_edit_text.text.toString()
@@ -143,15 +147,28 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             val day =    cal.get(Calendar.DAY_OF_MONTH)
             val hour = cal.get(Calendar.HOUR)
             val min = cal.get(Calendar.MINUTE)
+            val duration_hour: Int
+            val duration_min: Int
+            if (view.hour_input.text.toString()=="") {
+                duration_hour=0
+            }
+            else{
+                duration_hour =view.hour_input.text.toString().toInt()
+            }
+            if (view.minute_input.text.toString()=="") {
+                duration_min=0
+            }
+            else{
+                duration_min =view.minute_input.text.toString().toInt()
+            }
 
-            val duration_hour =view.hour_input.text.toString().toInt()
-            val duration_min =view.minute_input.text.toString().toInt()
+
+
 
             if(position>=0){
                 edit(position, title, duration_hour,duration_min)
             }else {
                 add(Task(title, Date(day,month,year).toString(),"$hour : $min",duration_hour,duration_min))
-                //updateQuote(MovieQuote(quote,movie))
             }
         }
         builder.setNegativeButton(android.R.string.cancel,null)
@@ -209,13 +226,13 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     private fun updateDateInView() {
         val myFormat = "MM/dd/yyyy" // mention the format you need
         val sdf = SimpleDateFormat(myFormat, Locale.US)
-        date_button!!.text = sdf.format(cal.getTime())
+        date_button!!.text = "Date: " + sdf.format(cal.getTime())
     }
 
     private fun updateTimeInView() {
         val myFormat = "HH:mm" // mention the format you need
         val sdf = SimpleDateFormat(myFormat, Locale.US)
-        startTime_button!!.text = sdf.format(cal.getTime())
+        startTime_button!!.text = "Start Time: "+ sdf.format(cal.getTime())
     }
 
 }
