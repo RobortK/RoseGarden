@@ -8,10 +8,10 @@ import edu.rosehulman.caoz.rosegarden.TaskFragment
 
 class PrefUtil(id: String) {
     //companion object {
-    private val ALARM_SET_TIME_ID = "id"+"_backgrounded_time"
-    private val PREVIOUS_TIMER_LENGTH_SECONDS_ID = "id"+"_previous_timer_length_seconds"
-    private val TIMER_STATE_ID = "id"+"_timer.timer_state"
-    private val SECONDS_REMAINING_ID = "id"+"_seconds_remaining"
+    private val ALARM_SET_TIME_ID = id+"_backgrounded_time"
+    private val PREVIOUS_TIMER_LENGTH_SECONDS_ID = id+"_previous_timer_length_seconds"
+    private val TIMER_STATE_ID = id+"_timer.timer_state"
+    private val SECONDS_REMAINING_ID = id+"_seconds_remaining"
 
 
 

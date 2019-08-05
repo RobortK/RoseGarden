@@ -39,28 +39,6 @@ class ListFragment : Fragment() {
         listView.recycler_view.setHasFixedSize(true)
         listView.recycler_view.scrollToPosition(date-1)
 
-//        val simpleItemTouchCallback =
-//            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-//
-//                override fun onMove(
-//                    recyclerView: RecyclerView,
-//                    viewHolder: RecyclerView.ViewHolder,
-//                    target: RecyclerView.ViewHolder
-//                ): Boolean {
-//                    return false
-//                }
-//
-//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                    val position = viewHolder.adapterPosition
-//
-//                    if (direction == ItemTouchHelper.RIGHT) {
-//                        adapter.remove(position)
-//                    }
-//                }
-//            }
-//
-//        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-//        itemTouchHelper.attachToRecyclerView(listView.recycler_view)
 
         return listView
     }

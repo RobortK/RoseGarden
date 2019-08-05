@@ -79,14 +79,13 @@ class TaskFragment : Fragment() {
 
         }
         prefUtil = PrefUtil(task!!.id)
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view =inflater.inflate(R.layout.fragment_task, container, false)
         view.task_name.text = task!!.title
         var minuteStr =
@@ -133,10 +132,10 @@ class TaskFragment : Fragment() {
         if (timerState == TimerState.Running){
             timer.cancel()
             val wakeUpTime = setAlarm(context!!, nowSeconds, secondsRemaining)
-            //TODO: start background timer and show notification
+
         }
         else if (timerState == TimerState.Paused){
-            //TODO: show notification
+
         }
 
         prefUtil.setPreviousTimerLengthSeconds(timerLengthSeconds, context!!)

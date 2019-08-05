@@ -65,8 +65,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
 
     }
 
-
-
     private fun switchToLoginFragment() {
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container, LoginFragment())
@@ -111,10 +109,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
         ft.commit()
     }
 
-
-
-
-
     override fun onLoginButtonPressed(type: Int) {
         if(type==1) {
             launchLoginUI()
@@ -123,11 +117,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
 
         }
     }
-
-
-
-
-
 
 
     private fun launchLoginUI() {

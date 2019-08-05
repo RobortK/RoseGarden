@@ -39,7 +39,7 @@
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:gravity="center"
-                android:text="25%"
+                android:text=""
                 android:layout_centerInParent="true"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp" />
@@ -80,7 +80,7 @@
     </LinearLayout>
 
     <TextView
-            android:text="Due in 0D 42 Mins"
+            android:text="Due in 42 Mins"
             android:textStyle="bold"
             android:textSize="40sp"
             android:layout_width="wrap_content"
