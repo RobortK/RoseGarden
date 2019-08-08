@@ -6,14 +6,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
-import com.google.android.gms.tasks.Task as Task
+import java.util.*
 
 class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
     LoginFragment.OnLoginButtonPressedListener
 {
 
+
+    private var cal = Calendar.getInstance()
     private  val auth = FirebaseAuth.getInstance()
     lateinit var authStateListener: FirebaseAuth.AuthStateListener
 
@@ -50,12 +51,8 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
             val user = auth.currentUser
             Log.d(Constants.TAG,"In auth listener, user = $user")
             if(user != null){
-                Log.d(Constants.TAG,"UID: ${user.uid}")
-                Log.d(Constants.TAG,"Name: ${user.displayName}")
-                Log.d(Constants.TAG,"Email: ${user.email}")
-                Log.d(Constants.TAG,"Phone: ${user.phoneNumber}")
-                Log.d(Constants.TAG,"Photo URL: ${user.photoUrl}")
-                switchToPhotoFragment(user.uid)
+
+                switchToListFragment(user.uid)
             }
             else{
                 //toolbar.title ="Photo Bucket"
@@ -70,9 +67,9 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
         ft.replace(R.id.fragment_container, LoginFragment())
         ft.commit()
     }
-    private fun switchToPhotoFragment(uid:String) {
+    private fun switchToListFragment(uid:String) {
 
-        val fragment = ListFragment.newInstance(uid)
+        val fragment = ListFragment.newInstance(uid,cal)
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_container,fragment)
         ft.commit()
@@ -107,6 +104,36 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
         ft.replace(R.id.fragment_container,taskFragment)
         ft.addToBackStack("detail")
         ft.commit()
+    }
+    override fun changeMonth(calendar: Calendar, isNext: Boolean) {
+        var year = calendar.get(Calendar.YEAR)
+        var month = calendar.get(Calendar.MONTH)
+        if(isNext){
+            if(month==12){
+                year++
+                month =1
+            }
+            else{
+                month++
+            }
+         }
+        else{
+            if(month==1){
+                year--
+                month =12
+            }
+            else{
+                month--
+            }
+        }
+        cal.set(Calendar.YEAR,year)
+        cal.set(Calendar.MONTH,month)
+        switchToListFragment( auth.currentUser!!.uid)
+    }
+
+    override fun chooseDate(calendar: Calendar) {
+        cal = calendar
+        switchToListFragment( auth.currentUser!!.uid)
     }
 
     override fun onLoginButtonPressed(type: Int) {

@@ -10,11 +10,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String) : RecyclerView.Adapter<ListViewHolder>() {
+class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String, val cal: Calendar) : RecyclerView.Adapter<ListViewHolder>() {
 
     private  val  dayList = ArrayList<Date>()
     private  val   adapterList = ArrayList<taskAdapter>()
-    private var cal = Calendar.getInstance()
+
 
     init {
 

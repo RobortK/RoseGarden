@@ -22,13 +22,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/prev_button"
                 android:layout_weight="1"/>
-        <TextView
+        <Button
                 android:text="@string/default_mouth_year"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/month_title"
                 android:gravity="center"
+                android:background="@android:color/transparent"
                 android:layout_weight="4"/>
+
         <ImageButton
                 android:src="@drawable/ic_next"
                 android:background="@android:color/transparent"

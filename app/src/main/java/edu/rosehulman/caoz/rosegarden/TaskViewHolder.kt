@@ -22,13 +22,8 @@ class TaskViewHolder(itemView: View, adapter: taskAdapter): RecyclerView.ViewHol
 
     fun bind(task: Task) {
         taskTitleView.text = task.title
-        var minuteStr =
-            if(task!!.minute>=10){
-                task!!.minute.toString()
-            }
-            else{
-                "0"+  task!!.minute.toString()
-            }
-        taskTimeView.text =   "${if (task!!.hour == 0)minuteStr+" Mins"  else task!!.hour.toString()+"Hours "+minuteStr+"Mins"}"
+
+        taskTimeView.text =   "${if (task!!.hour == 0)task!!.minute.toString()+" Mins"  
+        else task!!.hour.toString()+ "Hours "+task!!.minute.toString()+"Mins"}"
     }
 }
