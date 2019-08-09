@@ -32,6 +32,13 @@
             android:layout_centerInParent="true"
             android:id="@+id/progressBar"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/not_done" tools:ignore="VectorDrawableCompat"
+                android:layout_centerInParent="true"
+                app:backgroundTint="@android:color/transparent"/>
 
 
         <TextView
@@ -40,9 +47,8 @@
                 android:layout_height="250dp"
                 android:gravity="center"
                 android:text=""
-                android:layout_centerInParent="true"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="20sp" />
+                android:textSize="20sp" android:layout_centerInParent="true"/>
 
     </RelativeLayout>
     <TextView
@@ -79,10 +85,15 @@
 
     </LinearLayout>
 
+
+
     <TextView
             android:text="Due in 42 Mins"
             android:textStyle="bold"
             android:textSize="40sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/due_time"/>
+
+
+
 </LinearLayout>

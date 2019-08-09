@@ -22,5 +22,6 @@ class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
+
     }
 }

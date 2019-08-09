@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 import java.time.Duration
 
 @Parcelize
-data class Task(var title: String = "", var date:String ="", var startTime:String="", var hour:Int=0, var minute:Int =30): Parcelable {
+data class Task(var title: String = "", var date:String ="", var startTime:String="", var hour:Int=0, var minute:Int =30, var isDone:Boolean = false): Parcelable {
     @get: Exclude
     var id = ""
     @ServerTimestamp

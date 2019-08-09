@@ -46,7 +46,7 @@ class TaskFragment : Fragment() {
     }
 
     enum class TimerState{
-        Stopped, Paused, Running
+        Stopped, Paused, Running, Done
     }
 
 
@@ -96,6 +96,25 @@ class TaskFragment : Fragment() {
                 "0"+  task!!.minute.toString()
             }
         view.due_time.text = "${if (task!!.hour == 0)minuteStr+" Mins"  else task!!.hour.toString()+"Hours "+minuteStr+"Mins"}"
+
+//        view.fab_done.setOnClickListener{v ->
+//            if(task!!.isDone){
+//                startTimer()
+//                timerState =  TimerState.Running
+//            }
+//            else{
+//                startTimer()
+//                timer.cancel()
+//                view.progressBar.progress =  view.progressBar.max
+//                timerState = TimerState.Done
+//
+//                prefUtil.setSecondsRemaining(timerLengthSeconds, context!!)
+//                secondsRemaining = timerLengthSeconds
+//                updateCountdownUI()
+//            }
+//            task!!.isDone =!task!!.isDone
+//            updateButtons()
+//        }
 
         view.fab_start.setOnClickListener{v ->
             startTimer()
@@ -231,7 +250,7 @@ class TaskFragment : Fragment() {
             TimerState.Running ->{
                 fab_start.isEnabled = false
                 fab_pause.isEnabled = true
-                fab_stop.isEnabled = true
+                fab_stop.isEnabled = false
             }
             TimerState.Stopped -> {
                 fab_start.isEnabled = true
@@ -242,6 +261,11 @@ class TaskFragment : Fragment() {
                 fab_start.isEnabled = true
                 fab_pause.isEnabled = false
                 fab_stop.isEnabled = true
+            }
+            TimerState.Done ->{
+                fab_start.isEnabled = false
+                fab_pause.isEnabled = false
+                fab_stop.isEnabled = false
             }
         }
     }
