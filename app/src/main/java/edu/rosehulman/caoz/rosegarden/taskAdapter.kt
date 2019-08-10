@@ -199,11 +199,16 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
     }
 
+    fun  markDone(isDone: Boolean,position: Int){
+        taskList[position].isDone = isDone
+        taskRef.document(taskList[position].id).set(taskList[position])
+    }
+
 
 
     fun  selectTeamAt(adapterPosition: Int){
         val task = taskList[adapterPosition]
-        listener?.onSelected(task)
+        listener?.onSelected(task, adapterPosition, this)
     }
 
 

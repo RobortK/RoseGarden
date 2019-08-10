@@ -96,8 +96,9 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
     }
 
 
-    override fun onSelected(task: edu.rosehulman.caoz.rosegarden.Task) {
-        val taskFragment = TaskFragment.newInstance(task)
+    override fun onSelected(task: edu.rosehulman.caoz.rosegarden.Task, position: Int, adapter: taskAdapter) {
+       // val taskFragment = TaskFragment(adapter).newInstance(task, position)
+        val taskFragment = TaskFragment(adapter,task,position)
         val ft = supportFragmentManager.beginTransaction()
         ft.setCustomAnimations(android.R.anim.slide_in_left,
             android.R.anim.slide_out_right);

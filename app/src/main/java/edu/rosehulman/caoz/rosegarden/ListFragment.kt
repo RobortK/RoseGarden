@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_list.view.*
 import java.text.DateFormatSymbols
+import java.text.FieldPosition
 import java.time.LocalDateTime
 import java.util.*
 
@@ -79,9 +80,9 @@ class ListFragment : Fragment() {
         }
     }
 
-    fun onButtonPressed(task: Task) {
-        listener?.onSelected(task)
-    }
+//    fun onButtonPressed(task: Task) {
+//        listener?.onSelected(task)
+//    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -120,7 +121,7 @@ class ListFragment : Fragment() {
 
 
     interface OnSelectedListener {
-        fun onSelected(task: Task)
+        fun onSelected(task: Task, position: Int, adapter: taskAdapter)
         fun changeMonth(calendar: Calendar,isNext: Boolean)
         fun chooseDate(calendar: Calendar)
 

@@ -18,32 +18,37 @@ import kotlinx.android.synthetic.main.fragment_task.view.*
 import kotlinx.android.synthetic.main.fragment_task.view.fab_pause
 import kotlinx.android.synthetic.main.fragment_task.view.fab_start
 import kotlinx.android.synthetic.main.fragment_task.view.fab_stop
+import java.text.ParsePosition
 import java.util.*
 
 
 private const val ARG_TASK = "Task"
+private const val ARG_INDEX = "index"
 
 
 
-class TaskFragment : Fragment() {
+class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : Fragment() {
 
-    private var task: Task? = null
+    //private var task: Task? = null
     private lateinit var timer: CountDownTimer
     private var timerLengthSeconds: Long = 0
     private var timerState = TimerState.Stopped
     private var secondsRemaining: Long = 0
     private lateinit var prefUtil:PrefUtil
-    companion object {
+    //private var position: Int? = null
 
-
-        @JvmStatic
-        fun newInstance(task: Task) =
-            TaskFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_TASK,task)
-                }
-            }
-    }
+//    companion object {
+//
+//
+//        @JvmStatic
+//        fun newInstance(task: Task, position: Int) =
+//            TaskFragment().apply {
+//                arguments = Bundle().apply {
+//                    putParcelable(ARG_TASK,task)
+//                    putInt(ARG_INDEX,position)
+//                }
+//            }
+//    }
 
     enum class TimerState{
         Stopped, Paused, Running, Done
@@ -74,10 +79,10 @@ class TaskFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            task = it.getParcelable<Task>(ARG_TASK)
-
-        }
+//        arguments?.let {
+//            task = it.getParcelable<Task>(ARG_TASK)
+//            position = it.getInt(ARG_INDEX)
+//        }
         prefUtil = PrefUtil(task!!.id)
     }
 
@@ -192,17 +197,17 @@ class TaskFragment : Fragment() {
     }
 
     private fun onTimerFinished(){
-        timerState = TimerState.Stopped
+        timerState = TimerState.Done
 
         //set the length of the timer to be the one set in SettingsActivity
         //if the length was changed when the timer was running
-        setNewTimerLength()
+        //setNewTimerLength()
 
-        progressBar.progress = 0
+        //progressBar.progress = 0
 
-        prefUtil.setSecondsRemaining(timerLengthSeconds, context!!)
-        secondsRemaining = timerLengthSeconds
-
+//        prefUtil.setSecondsRemaining(timerLengthSeconds, context!!)
+//        secondsRemaining = timerLengthSeconds
+        adapter.markDone(true, position)
         updateButtons()
         updateCountdownUI()
     }
@@ -217,6 +222,7 @@ class TaskFragment : Fragment() {
                 secondsRemaining = millisUntilFinished / 1000
                 updateCountdownUI()
             }
+
         }.start()
     }
 
