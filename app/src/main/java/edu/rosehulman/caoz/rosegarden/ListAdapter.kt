@@ -47,7 +47,7 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
 
     fun  add(date: Date){
         dayList.add(date)
-        val taskAdapter = taskAdapter(context, listener,uid,date.toString())
+        val taskAdapter = taskAdapter(context, listener,uid,date)
         adapterList.add(taskAdapter)
         notifyItemInserted(0)
     }

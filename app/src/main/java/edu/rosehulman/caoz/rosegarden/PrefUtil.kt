@@ -11,14 +11,12 @@ private const val SECONDS_REMAINING_ID = "seconds_remaining"
 class PrefUtil(val id: String) {
     //companion object {
 
-
-
-
         fun getPreviousTimerLengthSeconds(context: Context): Long {
             val preferences = context.getSharedPreferences(id, Context.MODE_PRIVATE)
 
             return preferences.getLong(PREVIOUS_TIMER_LENGTH_SECONDS_ID,0)
         }
+
 
         fun setPreviousTimerLengthSeconds(seconds: Long, context: Context) {
             val editor = context.getSharedPreferences(id, Context.MODE_PRIVATE).edit()

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,9 +23,6 @@ import java.text.ParsePosition
 import java.util.*
 
 
-private const val ARG_TASK = "Task"
-private const val ARG_INDEX = "index"
-
 
 
 class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : Fragment() {
@@ -35,6 +33,7 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
     private var timerState = TimerState.Stopped
     private var secondsRemaining: Long = 0
     private lateinit var prefUtil:PrefUtil
+    private val handler = Handler()
     //private var position: Int? = null
 
 //    companion object {
@@ -55,16 +54,16 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
-    fun setAlarm(context: Context, nowSeconds: Long, secondsRemaining: Long): Long {
-        val wakeUpTime = (nowSeconds + secondsRemaining) * 1000
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, TimerExpiredReceiver(prefUtil)::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
-        prefUtil.setAlarmSetTime(nowSeconds, context)
-        return wakeUpTime
-    }
+//    @RequiresApi(Build.VERSION_CODES.KITKAT)
+//    fun setAlarm(context: Context, nowSeconds: Long, secondsRemaining: Long): Long {
+//        val wakeUpTime = (nowSeconds + secondsRemaining) * 1000
+//        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val intent = Intent(context, TimerExpiredReceiver(prefUtil)::class.java)
+//        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
+//        prefUtil.setAlarmSetTime(nowSeconds, context)
+//        return wakeUpTime
+//    }
 
     fun removeAlarm(context: Context){
         val intent = Intent(context, TimerExpiredReceiver(prefUtil)::class.java)
@@ -83,7 +82,8 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
 //            task = it.getParcelable<Task>(ARG_TASK)
 //            position = it.getInt(ARG_INDEX)
 //        }
-        prefUtil = PrefUtil(task!!.id)
+
+        prefUtil = PrefUtil(task.id)
     }
 
     override fun onCreateView(
@@ -92,34 +92,32 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
     ): View? {
 
         val view =inflater.inflate(R.layout.fragment_task, container, false)
-        view.task_name.text = task!!.title
-        var minuteStr =
-            if(task!!.minute>=10){
-                task!!.minute.toString()
+        view.task_name.text = task.title
+        val minuteStr =
+            if(task.minute>=10){
+                task.minute.toString()
         }
         else{
-                "0"+  task!!.minute.toString()
+                "0"+  task.minute.toString()
             }
-        view.due_time.text = "${if (task!!.hour == 0)minuteStr+" Mins"  else task!!.hour.toString()+"Hours "+minuteStr+"Mins"}"
+        view.due_time.text = "${if (task.hour == 0)minuteStr+" Mins"  else task.hour.toString()+"Hours "+minuteStr+"Mins"}"
 
-//        view.fab_done.setOnClickListener{v ->
-//            if(task!!.isDone){
-//                startTimer()
-//                timerState =  TimerState.Running
-//            }
-//            else{
-//                startTimer()
-//                timer.cancel()
-//                view.progressBar.progress =  view.progressBar.max
-//                timerState = TimerState.Done
-//
-//                prefUtil.setSecondsRemaining(timerLengthSeconds, context!!)
-//                secondsRemaining = timerLengthSeconds
-//                updateCountdownUI()
-//            }
-//            task!!.isDone =!task!!.isDone
-//            updateButtons()
-//        }
+        view.Button_Done.setOnClickListener{v ->
+            if(task.isDone){
+                startTimer()
+                view.Button_Done.setImageResource(R.drawable.not_done)
+                timer.cancel()
+                onTimerRest()
+               // updateButtons()
+            }
+            else{
+                timer.cancel()
+                onTimerFinished()
+                view.progressBar.progress =  view.progressBar.max
+            }
+            task.isDone =!task.isDone
+            adapter.markDone(task.isDone, position)
+        }
 
         view.fab_start.setOnClickListener{v ->
             startTimer()
@@ -135,9 +133,23 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
 
         view.fab_stop.setOnClickListener { v ->
             timer.cancel()
-            onTimerFinished()
+            onTimerRest()
         }
+        if(task.isDone){
+            timerState = TimerState.Done
 
+            Thread(Runnable {
+                    handler.post {
+                        view.progressBar.max=100
+                        view.progressBar.progress = 100
+                        view.time_remain.text= "0:00"
+                    }
+            }).start()
+            view.Button_Done.setImageResource(R.drawable.done)
+            view.fab_start.isEnabled = false
+            view.fab_pause.isEnabled = false
+            view.fab_stop.isEnabled = false
+        }
 
 
         return view
@@ -149,13 +161,13 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
         removeAlarm(context!!)
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
+
     override fun onPause() {
         super.onPause()
 
         if (timerState == TimerState.Running){
             timer.cancel()
-            val wakeUpTime = setAlarm(context!!, nowSeconds, secondsRemaining)
+           // val wakeUpTime = setAlarm(context!!, nowSeconds, secondsRemaining)
 
         }
         else if (timerState == TimerState.Paused){
@@ -203,11 +215,26 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
         //if the length was changed when the timer was running
         //setNewTimerLength()
 
-        //progressBar.progress = 0
+        progressBar.progress = progressBar.max
 
 //        prefUtil.setSecondsRemaining(timerLengthSeconds, context!!)
 //        secondsRemaining = timerLengthSeconds
         adapter.markDone(true, position)
+
+        Button_Done.setImageResource(R.drawable.done)
+        updateButtons()
+        time_remain.text = "0:00"
+    }
+
+
+    private fun onTimerRest(){
+        timerState = TimerState.Stopped
+
+
+        setNewTimerLength()
+        progressBar.progress = 0
+        prefUtil.setSecondsRemaining(timerLengthSeconds, context!!)
+        secondsRemaining = timerLengthSeconds
         updateButtons()
         updateCountdownUI()
     }
@@ -224,10 +251,12 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
             }
 
         }.start()
+
     }
 
+
     private fun setNewTimerLength(){
-        val lengthInMinutes = task!!.hour*60+task!!.minute
+        val lengthInMinutes = task.hour*60+task.minute
         timerLengthSeconds = (lengthInMinutes * 60L)
         progressBar.max = timerLengthSeconds.toInt()
     }

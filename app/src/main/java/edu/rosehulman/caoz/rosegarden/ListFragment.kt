@@ -124,6 +124,7 @@ class ListFragment : Fragment() {
         fun onSelected(task: Task, position: Int, adapter: taskAdapter)
         fun changeMonth(calendar: Calendar,isNext: Boolean)
         fun chooseDate(calendar: Calendar)
+        fun resetList()
 
     }
 

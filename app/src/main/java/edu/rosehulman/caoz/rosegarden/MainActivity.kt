@@ -95,6 +95,10 @@ class MainActivity : AppCompatActivity(), ListFragment.OnSelectedListener,
         }
     }
 
+    override fun resetList() {
+        initializeListeners()
+    }
+
 
     override fun onSelected(task: edu.rosehulman.caoz.rosegarden.Task, position: Int, adapter: taskAdapter) {
        // val taskFragment = TaskFragment(adapter).newInstance(task, position)

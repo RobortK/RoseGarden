@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String, var date:String) : RecyclerView.Adapter<TaskViewHolder>() {
+class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedListener?, var uid: String, var date:Date) : RecyclerView.Adapter<TaskViewHolder>() {
 
     private  val  taskList = ArrayList<Task>()
     private var cal = Calendar.getInstance()
@@ -33,8 +33,9 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
 
     init {
+
         taskRef
-            .orderBy(Task.LAST_TOUCHED_KEY, Query.Direction.ASCENDING)
+            .orderBy(Task.START_TIME, Query.Direction.ASCENDING)
 
             .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
                 if(exception != null){
@@ -43,7 +44,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
                 }
                 for (docChange in snapshot!!.documentChanges) {
                     val task = Task.fromSnapShot(docChange.document)
-                    if (task.date == date) {
+                    if (task.date == listOf(date.year,date.month,date.day)) {
                         when (docChange.type) {
                             DocumentChange.Type.ADDED -> {
                                 //taskList.add(task.pos, task)
@@ -59,9 +60,14 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
                             }
                             DocumentChange.Type.MODIFIED -> {
                                 val pos = taskList.indexOfFirst { task.id == it.id }
-                                taskList[pos] = task
-                                notifyItemChanged(pos)
-                            }
+                                if(pos==-1){
+                                   listener!!.resetList()
+                                }
+                                else {
+                                    taskList[pos] = task
+                                    notifyItemChanged(pos)
+                                }
+                                }
 
 
                         }
@@ -128,8 +134,9 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
 
         if(position >= 0){
+            setDate(taskList[position].date)
+            setTime(taskList[position].startTime)
             view.title_edit_text.setText(taskList[position].title)
-            //view.time_edit_text.setText(taskList[position].duration)
             view.hour_input.setText(taskList[position].hour.toString())
             view.minute_input.setText(taskList[position].minute.toString())
 
@@ -140,35 +147,30 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         }
         builder.setPositiveButton(android.R.string.ok){ _,_ ->
             val title = view.title_edit_text.text.toString()
-            var time = view.time_edit_text.text.toString()
-
             val year  =  cal.get(Calendar.YEAR)
             val month =cal.get(Calendar.MONTH)
             val day =    cal.get(Calendar.DAY_OF_MONTH)
             val hour = cal.get(Calendar.HOUR)
             val min = cal.get(Calendar.MINUTE)
-            val duration_hour: Int
-            val duration_min: Int
+            val durationHour: Int
+            val durationMin: Int
             if (view.hour_input.text.toString()=="") {
-                duration_hour=0
+                durationHour=0
             }
             else{
-                duration_hour =view.hour_input.text.toString().toInt()
+                durationHour =view.hour_input.text.toString().toInt()
             }
             if (view.minute_input.text.toString()=="") {
-                duration_min=0
+                durationMin=0
             }
             else{
-                duration_min =view.minute_input.text.toString().toInt()
+                durationMin =view.minute_input.text.toString().toInt()
             }
 
-
-
-
             if(position>=0){
-                edit(position, title, duration_hour,duration_min)
+                edit(position, Task(title, listOf(year,month,day),listOf(hour,min),durationHour,durationMin))
             }else {
-                add(Task(title, Date(day,month,year).toString(),"$hour : $min",duration_hour,duration_min))
+                add(Task(title, listOf(year,month,day),listOf(hour,min),durationHour,durationMin))
             }
         }
         builder.setNegativeButton(android.R.string.cancel,null)
@@ -191,10 +193,17 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         taskRef.document(taskList[position].id).delete()
     }
 
-    fun  edit(position: Int, title: String, hour: Int, min:Int){
-        taskList[position].title = title
-        taskList[position].hour = hour
-        taskList[position].minute = min
+    fun  edit(position: Int, task:Task){
+
+        taskList[position].title = task.title
+        taskList[position].date = task.date
+        taskList[position].startTime = task.startTime
+        taskList[position].hour= task.hour
+        taskList[position].minute= task.minute
+        taskList[position].isDone = false
+
+
+
         taskRef.document(taskList[position].id).set(taskList[position])
 
     }
@@ -212,6 +221,20 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     }
 
 
+    private fun setDate(date: List<Int>){
+        cal.set(Calendar.YEAR, date[0])
+        cal.set(Calendar.MONTH, date[1])
+        cal.set(Calendar.DAY_OF_MONTH, date[2])
+        updateDateInView()
+    }
+
+    private fun setTime(time: List<Int>){
+        cal.set(Calendar.HOUR, time[0])
+        cal.set(Calendar.MINUTE, time[1])
+        updateDateInView()
+    }
+
+
     // create an OnDateSetListener
     val dateSetListener = object : DatePickerDialog.OnDateSetListener {
         override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
@@ -219,7 +242,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, monthOfYear)
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateDateInView()
+            updateTimeInView()
         }
     }
 
