@@ -104,12 +104,13 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
         view.due_time.text = "${if (task.hour == 0)minuteStr+" Mins"  else task.hour.toString()+"Hours "+minuteStr+"Mins"}"
 
         view.Button_Done.setOnClickListener{v ->
-            if(task.isDone){
+            if(task.stage==2){
                 startTimer()
                 view.Button_Done.setImageResource(R.drawable.not_done)
                 timer!!.cancel()
                 onTimerRest()
                // updateButtons()
+                task.stage=1
             }
             else{
 
@@ -121,10 +122,10 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
                 Button_Done.setImageResource(R.drawable.done)
                 updateButtons()
                 time_remain.text = "0:00"
-
+                task.stage=2
             }
-            task.isDone =!task.isDone
-            adapter.markDone(task.isDone, position)
+
+            adapter.markDone(task.stage, position)
         }
 
         view.fab_start.setOnClickListener{v ->
@@ -143,7 +144,7 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
             timer!!.cancel()
             onTimerRest()
         }
-        if(task.isDone){
+        if(task.stage==2){
             timerState = TimerState.Done
 
             Thread(Runnable {
@@ -220,7 +221,7 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
     private fun onTimerFinished(){
         timerState = TimerState.Done
         progressBar.progress = progressBar.max
-        adapter.markDone(true, position)
+        adapter.markDone(2, position)
         Button_Done.setImageResource(R.drawable.done)
         updateButtons()
         time_remain.text = "0:00"
@@ -239,7 +240,7 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
 
     private fun startTimer(){
         timerState = TimerState.Running
-
+        adapter.markDone(1,position)
         timer = object : CountDownTimer(secondsRemaining * 1000, 1000) {
             override fun onFinish() = onTimerFinished()
 

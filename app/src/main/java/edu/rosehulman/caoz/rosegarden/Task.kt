@@ -8,7 +8,7 @@ import com.google.firebase.firestore.ServerTimestamp
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Task(var title: String = "", var date: List<Int> = listOf(0, 0, 0), var startTime: List<Int> = listOf(0, 0), var hour:Int=0, var minute:Int =30, var isDone:Boolean = false): Parcelable {
+data class Task(var title: String = "", var date: List<Int> = listOf(0, 0, 0), var startTime: List<Int> = listOf(0, 0), var hour:Int=0, var minute:Int =30, var stage:Int = 0): Parcelable {
     @get: Exclude
     var id = ""
 

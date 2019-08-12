@@ -207,8 +207,8 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
     }
 
-    fun  markDone(isDone: Boolean,position: Int){
-        taskList[position].isDone = isDone
+    fun  markDone(stage: Int,position: Int){
+        taskList[position].stage = stage
         taskRef.document(taskList[position].id).set(taskList[position])
     }
 

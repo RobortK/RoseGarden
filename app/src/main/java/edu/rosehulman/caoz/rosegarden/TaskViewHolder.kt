@@ -30,10 +30,14 @@ class TaskViewHolder(itemView: View, adapter: taskAdapter): RecyclerView.ViewHol
 
         taskTimeView.text =   "${if (task!!.hour == 0)task!!.minute.toString()+" Mins"  
         else task!!.hour.toString()+ "Hours "+task!!.minute.toString()+"Mins"}"
-        if(task.isDone){
-            cardView.setCardBackgroundColor(Color.GREEN)
-        }else{
-            cardView.setBackgroundColor(Color.GRAY)
+        when(task.stage){
+            2->cardView.setCardBackgroundColor(Color.GREEN)
+
+            1 ->cardView.setBackgroundColor(Color.YELLOW)
+
+            0-> cardView.setBackgroundColor(Color.GRAY)
+
+            else -> cardView.setBackgroundColor(Color.GRAY)
         }
         cardView.background.alpha= 80
 
