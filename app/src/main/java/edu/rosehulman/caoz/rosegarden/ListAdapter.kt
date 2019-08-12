@@ -21,8 +21,9 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
         val year  = cal.get(Calendar.YEAR)
         val month = cal.get(Calendar.MONTH)
         val totalDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-            for(i in 1..totalDay){
-            add(Date(i,month,year))
+        for(i in 1..totalDay){
+            cal.set(Calendar.DAY_OF_MONTH,i)
+            add(Date(i,month,year,cal.get(Calendar.DAY_OF_WEEK)))
         }
     }
 
@@ -38,7 +39,6 @@ class ListAdapter(var context: Context?, var listener: ListFragment.OnSelectedLi
     }
 
     fun getTaskAdapter(): taskAdapter{
-        //????
         return adapterList[cal.get(Calendar.DAY_OF_MONTH)-1]
     }
     override fun getItemCount() = dayList.size

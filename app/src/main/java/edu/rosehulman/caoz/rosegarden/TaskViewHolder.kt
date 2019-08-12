@@ -1,6 +1,7 @@
 package edu.rosehulman.caoz.rosegarden
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -32,7 +33,9 @@ class TaskViewHolder(itemView: View, adapter: taskAdapter): RecyclerView.ViewHol
         if(task.isDone){
             cardView.setCardBackgroundColor(Color.GREEN)
         }else{
-            cardView.setBackgroundColor(Color.WHITE)
+            cardView.setBackgroundColor(Color.GRAY)
         }
+        cardView.background.alpha= 80
+
     }
 }

@@ -35,7 +35,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     init {
 
         taskRef
-            .orderBy(Task.START_TIME, Query.Direction.ASCENDING)
+            .orderBy(Task.START_TIME, Query.Direction.DESCENDING)
 
             .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
                 if(exception != null){
@@ -49,7 +49,6 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
                             DocumentChange.Type.ADDED -> {
                                 //taskList.add(task.pos, task)
                                 taskList.add(0, task)
-
                                 notifyItemInserted(0)
                             }
                             DocumentChange.Type.REMOVED -> {
@@ -60,19 +59,15 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
                             }
                             DocumentChange.Type.MODIFIED -> {
                                 val pos = taskList.indexOfFirst { task.id == it.id }
-                                if(pos==-1){
-                                   listener!!.resetList()
-                                }
-                                else {
                                     taskList[pos] = task
                                     notifyItemChanged(pos)
-                                }
                                 }
 
 
                         }
                     }
                 }
+
             }
     }
 
@@ -195,16 +190,9 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
     fun  edit(position: Int, task:Task){
 
-        taskList[position].title = task.title
-        taskList[position].date = task.date
-        taskList[position].startTime = task.startTime
-        taskList[position].hour= task.hour
-        taskList[position].minute= task.minute
-        taskList[position].isDone = false
 
-
-
-        taskRef.document(taskList[position].id).set(taskList[position])
+        remove(position)
+        add(task)
 
     }
 
@@ -231,7 +219,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     private fun setTime(time: List<Int>){
         cal.set(Calendar.HOUR, time[0])
         cal.set(Calendar.MINUTE, time[1])
-        updateDateInView()
+        updateTimeInView()
     }
 
 
@@ -242,7 +230,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, monthOfYear)
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateTimeInView()
+            updateDateInView()
         }
     }
 

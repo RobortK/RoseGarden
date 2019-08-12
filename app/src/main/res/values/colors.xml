@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorTheme">#63B7FD</color>
     <color name="colorRed">#800000</color>
+    <color name="colorPlay">#22B14C</color>
+    <color name="colorPause">#FFFF00</color>
+    <color name="colorStop">#FF0000</color>
 </resources>

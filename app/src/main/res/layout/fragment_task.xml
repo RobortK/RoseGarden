@@ -65,13 +65,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
-                app:srcCompat="@drawable/play" tools:ignore="VectorDrawableCompat"/>
+                app:srcCompat="@drawable/play" tools:ignore="VectorDrawableCompat"
+                app:backgroundTint="@color/colorPlay"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
+                app:backgroundTint="@color/colorPause"
                 app:srcCompat="@drawable/pause" tools:ignore="VectorDrawableCompat"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -79,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
+            app:backgroundTint="@color/colorStop"
             app:srcCompat="@drawable/stop" tools:ignore="VectorDrawableCompat"/>
 
 
