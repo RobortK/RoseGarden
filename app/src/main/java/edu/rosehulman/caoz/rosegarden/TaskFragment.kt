@@ -101,7 +101,11 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
         else{
                 "0"+  task.minute.toString()
             }
-        view.due_time.text = "${if (task.hour == 0)minuteStr+" Mins"  else task.hour.toString()+"Hours "+minuteStr+"Mins"}"
+        view.due_time.text = "${if (task.hour == 0)""
+        else if(task.hour == 1)task!!.hour.toString()+ "Hour "
+        else task.hour.toString()+ "Hours " }" +
+                "${if (task.minute <=1) task.minute.toString()+ "Min"
+                else task.minute.toString()+ "Mins " }"
 
         view.Button_Done.setOnClickListener{v ->
             if(task.stage==2){
