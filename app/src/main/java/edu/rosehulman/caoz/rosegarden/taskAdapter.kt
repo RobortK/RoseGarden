@@ -48,8 +48,18 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
                         when (docChange.type) {
                             DocumentChange.Type.ADDED -> {
                                 //taskList.add(task.pos, task)
-                                taskList.add(0, task)
-                                notifyItemInserted(0)
+                                var index = -1
+                                for(i in 0 until taskList.size){
+                                    if(task.totalTime <= taskList[i].totalTime){
+                                        index = i
+                                        break
+                                    }
+                                }
+                                if(index ==-1){
+                                    index= taskList.size
+                                }
+                                taskList.add(index, task)
+                                notifyItemInserted(index)
                             }
                             DocumentChange.Type.REMOVED -> {
                                 val pos = taskList.indexOfFirst { task.id == it.id }
@@ -117,7 +127,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
                  TimePickerDialog(context!!,
                      timeSetListener,
-                     cal.get(Calendar.HOUR),
+                     cal.get(Calendar.HOUR_OF_DAY),
                      cal.get(Calendar.MINUTE),
                      false)
                 .show()
@@ -146,7 +156,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
             val year  =  cal.get(Calendar.YEAR)
             val month =cal.get(Calendar.MONTH)
             val day =    cal.get(Calendar.DAY_OF_MONTH)
-            val hour = cal.get(Calendar.HOUR)
+            val hour = cal.get(Calendar.HOUR_OF_DAY)
             val min = cal.get(Calendar.MINUTE)
             val durationHour: Int
             val durationMin: Int
@@ -218,7 +228,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
     }
 
     private fun setTime(time: List<Int>){
-        cal.set(Calendar.HOUR, time[0])
+        cal.set(Calendar.HOUR_OF_DAY, time[0])
         cal.set(Calendar.MINUTE, time[1])
         updateTimeInView()
     }
@@ -237,7 +247,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
 
     val timeSetListener = object : TimePickerDialog.OnTimeSetListener {
         override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
-            cal.set(Calendar.HOUR, p1)
+            cal.set(Calendar.HOUR_OF_DAY, p1)
             cal.set(Calendar.MINUTE, p2)
 
             updateTimeInView()
