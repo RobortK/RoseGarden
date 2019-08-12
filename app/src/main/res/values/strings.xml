@@ -2,7 +2,7 @@
     <string name="app_name">Rose Garden</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="rose_login">Rose-Hulman Login</string>
+    <string name="rose_login">Login Here</string>
     <string name="task_title">Task Title</string>
     <string name="task_time">Time Estimation</string>
     <string name="dialog_title_edit">Edit Task</string>
@@ -20,4 +20,6 @@
     <string name="default_mouth_year">June 2019</string>
     <string name="delete">Delete</string>
     <string name="default_task_name">Task</string>
+    <string name="hour">Hours</string>
+    <string name="min">Mins</string>
 </resources>
