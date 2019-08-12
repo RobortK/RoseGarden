@@ -36,6 +36,16 @@
                 android:gravity="center"
 
         />
+        <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/mini_progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+
+                android:layout_margin="2dp"
+        />
+
 
     </LinearLayout>
 

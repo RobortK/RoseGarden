@@ -110,7 +110,7 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
                 timer!!.cancel()
                 onTimerRest()
                // updateButtons()
-                task.stage=1
+                task.stage=0
             }
             else{
 
@@ -143,6 +143,8 @@ class TaskFragment(var adapter:taskAdapter, var task:Task, var position: Int) : 
         view.fab_stop.setOnClickListener { v ->
             timer!!.cancel()
             onTimerRest()
+            task.stage=0
+            adapter.markDone(task.stage, position)
         }
         if(task.stage==2){
             timerState = TimerState.Done

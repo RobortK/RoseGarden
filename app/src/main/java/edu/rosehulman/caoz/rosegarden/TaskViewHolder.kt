@@ -31,13 +31,22 @@ class TaskViewHolder(itemView: View, adapter: taskAdapter): RecyclerView.ViewHol
         taskTimeView.text =   "${if (task!!.hour == 0)task!!.minute.toString()+" Mins"  
         else task!!.hour.toString()+ "Hours "+task!!.minute.toString()+"Mins"}"
         when(task.stage){
-            2->cardView.setCardBackgroundColor(Color.GREEN)
-
-            1 ->cardView.setBackgroundColor(Color.YELLOW)
-
-            0-> cardView.setBackgroundColor(Color.GRAY)
-
-            else -> cardView.setBackgroundColor(Color.GRAY)
+            2-> {
+                cardView.setCardBackgroundColor(Color.GREEN)
+                cardView.mini_progressbar.hide()
+            }
+            1 -> {
+                cardView.setBackgroundColor(Color.YELLOW)
+                cardView.mini_progressbar.show()
+                    }
+            0-> {
+                cardView.setBackgroundColor(Color.GRAY)
+                cardView.mini_progressbar.hide()
+            }
+            else -> {
+                cardView.setBackgroundColor(Color.GRAY)
+                cardView.mini_progressbar.hide()
+            }
         }
         cardView.background.alpha= 80
 
