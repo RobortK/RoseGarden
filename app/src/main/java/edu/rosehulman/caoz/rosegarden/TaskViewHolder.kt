@@ -28,8 +28,10 @@ class TaskViewHolder(itemView: View, adapter: taskAdapter): RecyclerView.ViewHol
     fun bind(task: Task) {
         taskTitleView.text = task.title
 
-        taskTimeView.text =   "${if (task!!.hour == 0)task!!.minute.toString()+" Mins"  
-        else task!!.hour.toString()+ "Hours "+task!!.minute.toString()+"Mins"}"
+        taskTimeView.text =   "${if (task!!.hour == 0&& task!!.minute>1)task!!.minute.toString()+" Mins"
+        else if(task!!.hour == 0&& task!!.minute<=1)task!!.minute.toString()+"Min"
+        else if(task!!.hour == 1)task!!.hour.toString()+ "Hour "+task!!.minute.toString()+"Mins" 
+        else task!!.hour.toString()+ "Hours "+task!!.minute.toString()+"Mins" }"
         when(task.stage){
             2-> {
                 cardView.setCardBackgroundColor(Color.GREEN)
