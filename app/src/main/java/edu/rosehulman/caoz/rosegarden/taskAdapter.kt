@@ -139,6 +139,7 @@ class taskAdapter (var context: Context?, var listener: ListFragment.OnSelectedL
         else{
             view.hour_input.setText("0")
             view.minute_input.setText("30")
+            view.title_edit_text.setText(context!!.getString(R.string.default_task_name))
         }
         builder.setPositiveButton(android.R.string.ok){ _,_ ->
             val title = view.title_edit_text.text.toString()
